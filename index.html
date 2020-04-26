@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>謎攻</title>
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="css/shop-item.css" rel="stylesheet">
+  <style>
+    body{
+      font-family: "微軟正黑體"
+    }
+    h1, h2, h3{
+      font-family: "微軟正黑體"
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">謎攻</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <div class="row">
+      <div class="col-sm-12">
+        <h1 class="my-4">搜尋</h1>
+      </div>
+    </div>
+
+    <div class="row">
+
+      <div class="col-sm-10">
+        <div class="form-group">
+          <input type="text"
+            class="form-control" name="" id="kw" aria-describedby="helpId" placeholder="請輸入題目關鍵字或題目提示">
+          <small class="form-text text-muted">搜尋結果: <span id="count"></span> 筆</small>
+        </div>
+      </div>
+      
+      <div class="col-sm-2">
+        <button class="btn btn-success" id="btn-search">搜尋</button>
+        <button class="btn btn-info" id="btn-random">隨機</button>
+      </div>
+      
+
+      <div class="col-sm-12">
+
+        <div class="card mt-4">
+
+          <div class="card-body" id="searchResult">
+          </div>
+        </div>
+        <!-- /.card -->
+
+
+      </div>
+      <!-- /.col-lg-9 -->
+
+    </div>
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Bootstrap core JavaScript -->
+  <script id="trTemplate" type="text/x-handlebars-template">
+    <div class="card bg-light mt-3">
+        <div class="card-body">
+          <p class="card-text" style="font-size: 1.5rem;"><strong>問題: {{ques}}</strong><br/>提示:「{{hint}}」</p>
+          <h4 class="card-title"><strong class="text-danger">答案: {{ans}}</strong></h4>
+        </div>
+      </div>
+  </script>
+
+  <script src="./data/guess.js"></script>
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.0/handlebars.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.min.js"></script>
+  <script>
+    var source = document.getElementById("trTemplate").innerHTML;
+    var template = Handlebars.compile(source);
+
+    function processSearch(){
+      $('#searchResult').empty();
+      var skw = _.trim($('#kw').val());
+      var fs = _.filter(data, function(o) { 
+        return (o.ques.indexOf(skw) >= 0 || o.hint.indexOf(skw) >= 0);
+      });
+      fs.forEach(ele => {
+        var html = template(ele);
+        $('#searchResult').append(html);
+      });
+      $('#count').html(fs.length)
+    }
+
+    $('#kw').change(function(){
+      processSearch();
+    });
+
+    $('#btn-search').click(function(){
+      processSearch();
+    });
+
+    $('#btn-random').click(function(){
+      var ele = data[_.random(data.length)];
+      var html = template(ele);
+      $('#searchResult').empty();
+      $('#searchResult').append(html);
+      $('#count').html('1')
+    });
+
+  </script>
+
+
+</body>
+
+</html>
